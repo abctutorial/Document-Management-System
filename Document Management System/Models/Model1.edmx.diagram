@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="b36c7bf32496444ebb82cc1ad3077cd7" Name="Diagram1">
+        <EntityTypeShape EntityType="DocumentManagementModel.Category" Width="1.5" PointX="7.5" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DocumentManagementModel.Country" Width="1.5" PointX="0.75" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DocumentManagementModel.Entity" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DocumentManagementModel.Program" Width="1.5" PointX="5.25" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DocumentManagementModel.Project" Width="1.5" PointX="7.5" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="DocumentManagementModel.sysdiagram" Width="1.5" PointX="0.75" PointY="7.25" IsExpanded="true" />
+        <AssociationConnector Association="DocumentManagementModel.FK_Entity_Country" ManuallyRouted="false" />
+        <AssociationConnector Association="DocumentManagementModel.FK_Program_Entity" ManuallyRouted="false" />
+        <AssociationConnector Association="DocumentManagementModel.FK_Project_Program" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DocumentManagementModel.Upload" Width="1.5" PointX="9.75" PointY="1.125" />
+        <AssociationConnector Association="DocumentManagementModel.FK_Upload_Category" />
+        <AssociationConnector Association="DocumentManagementModel.FK_Upload_Country" />
+        <AssociationConnector Association="DocumentManagementModel.FK_Upload_Entity" />
+        <AssociationConnector Association="DocumentManagementModel.FK_Upload_Program" />
+        <AssociationConnector Association="DocumentManagementModel.FK_Upload_Project" />
+        <EntityTypeShape EntityType="DocumentManagementModel.RecentHistory" Width="1.5" PointX="3.375" PointY="6.75" />
+        <EntityTypeShape EntityType="DocumentManagementModel.Designation" Width="1.5" PointX="0.75" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

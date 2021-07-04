@@ -1,0 +1,257 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DocumentManagementModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="CategoryId" />
+    </Key>
+    <Property Name="CategoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Int32" />
+    <NavigationProperty Name="Uploads" Relationship="DocumentManagementModel.FK_Upload_Category" FromRole="Category" ToRole="Upload" />
+  </EntityType>
+  <EntityType Name="Country">
+    <Key>
+      <PropertyRef Name="CountryId" />
+    </Key>
+    <Property Name="CountryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Int32" />
+    <NavigationProperty Name="Entities" Relationship="Self.FK_Entity_Country" FromRole="Country" ToRole="Entity" />
+    <NavigationProperty Name="Uploads" Relationship="DocumentManagementModel.FK_Upload_Country" FromRole="Country" ToRole="Upload" />
+  </EntityType>
+  <EntityType Name="Entity">
+    <Key>
+      <PropertyRef Name="EntityId" />
+    </Key>
+    <Property Name="EntityId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CountryId" Type="Int32" />
+    <Property Name="EntityName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Int32" />
+    <NavigationProperty Name="Country" Relationship="Self.FK_Entity_Country" FromRole="Entity" ToRole="Country" />
+    <NavigationProperty Name="Programs" Relationship="Self.FK_Program_Entity" FromRole="Entity" ToRole="Program" />
+    <NavigationProperty Name="Uploads" Relationship="DocumentManagementModel.FK_Upload_Entity" FromRole="Entity" ToRole="Upload" />
+  </EntityType>
+  <EntityType Name="Program">
+    <Key>
+      <PropertyRef Name="ProgramId" />
+    </Key>
+    <Property Name="ProgramId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EntityId" Type="Int32" />
+    <Property Name="ProgramName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Int32" />
+    <NavigationProperty Name="Entity" Relationship="Self.FK_Program_Entity" FromRole="Program" ToRole="Entity" />
+    <NavigationProperty Name="Projects" Relationship="Self.FK_Project_Program" FromRole="Program" ToRole="Project" />
+    <NavigationProperty Name="Uploads" Relationship="DocumentManagementModel.FK_Upload_Program" FromRole="Program" ToRole="Upload" />
+  </EntityType>
+  <EntityType Name="Project">
+    <Key>
+      <PropertyRef Name="ProjectId" />
+    </Key>
+    <Property Name="ProjectId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProgramId" Type="Int32" />
+    <Property Name="ProjectName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Int32" />
+    <NavigationProperty Name="Program" Relationship="Self.FK_Project_Program" FromRole="Project" ToRole="Program" />
+    <NavigationProperty Name="Uploads" Relationship="DocumentManagementModel.FK_Upload_Project" FromRole="Project" ToRole="Upload" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_Entity_Country">
+    <End Role="Country" Type="Self.Country" Multiplicity="0..1" />
+    <End Role="Entity" Type="Self.Entity" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Country">
+        <PropertyRef Name="CountryId" />
+      </Principal>
+      <Dependent Role="Entity">
+        <PropertyRef Name="CountryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Program_Entity">
+    <End Role="Entity" Type="Self.Entity" Multiplicity="0..1" />
+    <End Role="Program" Type="Self.Program" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Entity">
+        <PropertyRef Name="EntityId" />
+      </Principal>
+      <Dependent Role="Program">
+        <PropertyRef Name="EntityId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Project_Program">
+    <End Role="Program" Type="Self.Program" Multiplicity="0..1" />
+    <End Role="Project" Type="Self.Project" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Program">
+        <PropertyRef Name="ProgramId" />
+      </Principal>
+      <Dependent Role="Project">
+        <PropertyRef Name="ProgramId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DocumentManagementEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Categories" EntityType="Self.Category" />
+    <EntitySet Name="Countries" EntityType="Self.Country" />
+    <EntitySet Name="Entities" EntityType="Self.Entity" />
+    <EntitySet Name="Programs" EntityType="Self.Program" />
+    <EntitySet Name="Projects" EntityType="Self.Project" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <AssociationSet Name="FK_Entity_Country" Association="Self.FK_Entity_Country">
+      <End Role="Country" EntitySet="Countries" />
+      <End Role="Entity" EntitySet="Entities" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Program_Entity" Association="Self.FK_Program_Entity">
+      <End Role="Entity" EntitySet="Entities" />
+      <End Role="Program" EntitySet="Programs" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Project_Program" Association="Self.FK_Project_Program">
+      <End Role="Program" EntitySet="Programs" />
+      <End Role="Project" EntitySet="Projects" />
+    </AssociationSet>
+    <EntitySet Name="Uploads" EntityType="DocumentManagementModel.Upload" />
+    <AssociationSet Name="FK_Upload_Category" Association="DocumentManagementModel.FK_Upload_Category">
+      <End Role="Category" EntitySet="Categories" />
+      <End Role="Upload" EntitySet="Uploads" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Upload_Country" Association="DocumentManagementModel.FK_Upload_Country">
+      <End Role="Country" EntitySet="Countries" />
+      <End Role="Upload" EntitySet="Uploads" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Upload_Entity" Association="DocumentManagementModel.FK_Upload_Entity">
+      <End Role="Entity" EntitySet="Entities" />
+      <End Role="Upload" EntitySet="Uploads" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Upload_Program" Association="DocumentManagementModel.FK_Upload_Program">
+      <End Role="Program" EntitySet="Programs" />
+      <End Role="Upload" EntitySet="Uploads" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Upload_Project" Association="DocumentManagementModel.FK_Upload_Project">
+      <End Role="Project" EntitySet="Projects" />
+      <End Role="Upload" EntitySet="Uploads" />
+    </AssociationSet>
+    <EntitySet Name="RecentHistories" EntityType="DocumentManagementModel.RecentHistory" />
+    <EntitySet Name="Designations" EntityType="DocumentManagementModel.Designation" />
+  </EntityContainer>
+  <EntityType Name="Upload">
+    <Key>
+      <PropertyRef Name="UploadId" />
+    </Key>
+    <Property Name="UploadId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CategoryId" Type="Int32" Nullable="false" />
+    <Property Name="CountryId" Type="Int32" />
+    <Property Name="EntityId" Type="Int32" />
+    <Property Name="ProgramId" Type="Int32" />
+    <Property Name="ProjectId" Type="Int32" />
+    <Property Name="ResourceUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Extension" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ResourceName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Tags" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedBy" Type="Int32" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Category" Relationship="DocumentManagementModel.FK_Upload_Category" FromRole="Upload" ToRole="Category" />
+    <NavigationProperty Name="Country" Relationship="DocumentManagementModel.FK_Upload_Country" FromRole="Upload" ToRole="Country" />
+    <NavigationProperty Name="Entity" Relationship="DocumentManagementModel.FK_Upload_Entity" FromRole="Upload" ToRole="Entity" />
+    <NavigationProperty Name="Program" Relationship="DocumentManagementModel.FK_Upload_Program" FromRole="Upload" ToRole="Program" />
+    <NavigationProperty Name="Project" Relationship="DocumentManagementModel.FK_Upload_Project" FromRole="Upload" ToRole="Project" />
+    <Property Name="ApprovedDate" Type="DateTime" Precision="3" />
+    <Property Name="ApprovedByDesgination" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ApprovedByName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Version" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="LastReviewedDate" Type="DateTime" Precision="3" />
+    <Property Name="EffectiveFrom" Type="DateTime" Precision="3" />
+    <Property Name="EffectiveTo" Type="DateTime" Precision="3" />
+    <Property Name="IsGlobal" Type="Boolean" />
+    <Property Name="IsPinProtected" Type="Boolean" />
+  </EntityType>
+  <Association Name="FK_Upload_Category">
+    <End Type="DocumentManagementModel.Category" Role="Category" Multiplicity="1" />
+    <End Type="DocumentManagementModel.Upload" Role="Upload" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Category">
+        <PropertyRef Name="CategoryId" />
+      </Principal>
+      <Dependent Role="Upload">
+        <PropertyRef Name="CategoryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Upload_Country">
+    <End Type="DocumentManagementModel.Country" Role="Country" Multiplicity="0..1" />
+    <End Type="DocumentManagementModel.Upload" Role="Upload" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Country">
+        <PropertyRef Name="CountryId" />
+      </Principal>
+      <Dependent Role="Upload">
+        <PropertyRef Name="CountryId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Upload_Entity">
+    <End Type="DocumentManagementModel.Entity" Role="Entity" Multiplicity="0..1" />
+    <End Type="DocumentManagementModel.Upload" Role="Upload" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Entity">
+        <PropertyRef Name="EntityId" />
+      </Principal>
+      <Dependent Role="Upload">
+        <PropertyRef Name="EntityId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Upload_Program">
+    <End Type="DocumentManagementModel.Program" Role="Program" Multiplicity="0..1" />
+    <End Type="DocumentManagementModel.Upload" Role="Upload" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Program">
+        <PropertyRef Name="ProgramId" />
+      </Principal>
+      <Dependent Role="Upload">
+        <PropertyRef Name="ProgramId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Upload_Project">
+    <End Type="DocumentManagementModel.Project" Role="Project" Multiplicity="0..1" />
+    <End Type="DocumentManagementModel.Upload" Role="Upload" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Project">
+        <PropertyRef Name="ProjectId" />
+      </Principal>
+      <Dependent Role="Upload">
+        <PropertyRef Name="ProjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="RecentHistory">
+    <Key>
+      <PropertyRef Name="RecentHistoryId" />
+    </Key>
+    <Property Name="RecentHistoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="HistoryTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="HistoryDetail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="HistoryCategory" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+    <Property Name="Status" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Designation">
+    <Key>
+      <PropertyRef Name="DesignationId" />
+    </Key>
+    <Property Name="DesignationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DesignationName" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Status" Type="Int32" />
+  </EntityType>
+</Schema>

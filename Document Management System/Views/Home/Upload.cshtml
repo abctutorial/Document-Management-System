@@ -1,0 +1,213 @@
+﻿@model Document_Management_System.Models.HomeUploadViewModel
+@using Document_Management_System.Models;
+
+@{
+    ViewBag.Title = "Upload";
+}
+
+<div class="row">
+    @*@if (TempData["Success"] != null)
+        {
+            <p class="alert alert-success" id="successMessage">@TempData["Success"]</p>
+        }*@
+    <!-- Area Chart -->
+    <div class="col-xl-12 col-lg-12">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Upload</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                @*<form action="Upload" method="post" enctype="multipart/form-data">*@
+                @using (Html.BeginForm("Upload", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <label for="CategoryId">Policy Type<span style="color:red">*</span></label>
+                        <select name="CategoryId" class="form-control">
+                            <option value="">--Select--</option>
+                            @foreach (var i in Model.categories)
+                            {
+                                <option value="@i.CategoryId">@i.CategoryName</option>
+                            }
+                        </select>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="CountryId">Country</label>
+                        <select name="CountryId" id="CountryId" class="form-control">
+                            <option value="">--Select--</option>
+                            @foreach (var i in Model.countries)
+                            {
+                                <option value="@i.CountryId">@i.CountryName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="EntityId">Applicable for</label>
+                        <select name="EntityId" id="EntityId" class="form-control">
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <label for="ApprovedByDesgination">Approve by</label>
+                            <select name="ApprovedByDesgination" id="ApprovedByDesgination" class="form-control">
+                            </select>
+                        </div>
+                        <div class="col">
+                            <label for="ApprovedByName">Entity</label>
+                            <select name="ApprovedByName" id="ApprovedByName" class="form-control">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="ApprovedDate">Approved Date</label>
+                        <input type="date" name="ApprovedDate" id="ApprovedDate" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="LastReviewedDate">Last ReviewedDate</label>
+                        <input type="date" name="LastReviewedDate" id="LastReviewedDate" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="EffectiveFrom">Effective From</label>
+                        <input type="date" name="EffectiveFrom" id="EffectiveFrom" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="EffectiveTo">Effective To</label>
+                        <input type="date" name="EffectiveTo" id="EffectiveTo" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Version">Version</label>
+                        <input type="text" name="Version" id="Version" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="ResourceUrl">Attachment<span style="color:red">*</span></label>
+                        <input type="file" name="file" id="file" />
+                    </div>
+                    <div class="form-group">
+                        <label for="ResourceName">Document name<span style="color:red">*</span></label>
+                        <input name="ResourceName" id="ResourceName" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Tags">Tags</label>
+                        <input name="Tags" id="Tags" placeholder="Enter tags using , separated" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="IsGlobal">Is Global</label>
+                        @Html.CheckBox("IsGlobal")
+                    </div>
+                    <div class="form-group">
+                        <label for="IsPinProtected">Is Pin Protected</label>
+                        @Html.CheckBox("IsPinProtected")
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="reset" class="btn btn-default">Reset</button>
+                }
+                @*</form>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#CountryId").change(function () {
+            $("#EntityId").empty();
+            $("#ProgramId").empty();
+            $("#ProjectId").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetEntityByCountry")',
+                dataType: 'json',
+                data: { countryId: $("#CountryId").val() },
+                success: function (datas) {
+                    $.each(datas, function (i, item) {
+                        $("#EntityId").append('<option value="' + item.Value + '">' + item.Text + '</option>');
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed to retrieve states.' + ex);
+                }
+            });
+            return false;
+        })
+    });
+
+        $(document).ready(function () {
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetAllDesignation")',
+                dataType: 'json',
+                success: function (datas) {
+                    $.each(datas, function (i, item) {
+                        $("#ApprovedByDesgination").append('<option value="' + item.Text + '">' + item.Text + '</option>');
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed to retrieve states.' + ex);
+                }
+            });
+        });
+
+       $(document).ready(function () {
+            $("#ApprovedByName").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetAllEntity")',
+                dataType: 'json',
+                success: function (datas) {
+                    $.each(datas, function (i, item) {
+                        $("#ApprovedByName").append('<option value="' + item.Text + '">' + item.Text + '</option>');
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed to retrieve states.' + ex);
+                }
+            });
+    });
+        @*$(document).ready(function () {
+            $("#EntityId").change(function () {
+            $("#ProgramId").empty();
+            $("#ProjectId").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetProgramByEntity")',
+                dataType: 'json',
+                data: { entityId: $("#EntityId").val() },
+                success: function (datas) {
+                    $.each(datas, function (i, item) {
+                        $("#ProgramId").append('<option value="' + item.Value + '">' + item.Text + '</option>');
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed to retrieve states.' + ex);
+                }
+            });
+            return false;
+        })
+        });*@
+
+
+            @*$(document).ready(function () {
+                $("#ProgramId").change(function () {
+                $("#ProjectId").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetProjectByProgram")',
+                dataType: 'json',
+                data: { programId: $("#ProgramId").val() },
+                success: function (datas) {
+                    $.each(datas, function (i, item) {
+                        $("#ProjectId").append('<option value="' + item.Value + '">' + item.Text + '</option>');
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed to retrieve states.' + ex);
+                }
+            });
+            return false;
+        })
+    });*@
+</script>  

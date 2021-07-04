@@ -1,0 +1,335 @@
+﻿@model Document_Management_System.Models.HomeSearchViewModel
+@{
+    ViewBag.Title = "Search";
+}
+
+<br />
+<br />
+<!-- Content Row -->
+
+<div class="row">
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel" style="color:blueviolet">Enter your PIN,DOB to verify your identity</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <input type="hidden" id="hiddenDocumentId" value="" />
+                    <div class="form-group">
+                        <label for="pin">Pin</label>
+                        <input type="text" class="form-control" id="pin" placeholder="Enter Pin" name="pin">
+                    </div>
+                    <div class="form-group">
+                        <label for="date">Date Of Birth</label>
+                        <input type="date" class="form-control" id="date" placeholder="Enter DOB" name="date">
+                    </div>
+                    <p id="error_message" style="color:red;display:none;">
+                        <i><b>Your PIN is not exist!</b></i> or
+                        <br /><i><b>DOB is not matched!</b></i>
+                    </p>
+                    <p id="success_message" style="color:forestgreen;display:none;">
+                        <i><b>Successfully downloaded!</b></i>
+                    </p>
+                    <div>
+                        <a href="#" onclick="GetEmployeeByPinDOB()" class="btn btn-primary">Download <i class="fa fa-download" aria-hidden="true" title="Download"></i></a>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Pie Chart -->
+    <div class="col-xl-3 col-lg-4">
+        <div class="card border-left-warning shadow h-100 py-2 mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Find your document</h6>
+
+            </div>
+            <!-- Card Body -->
+            <div class="card-body">
+                <form action="../Home/Search">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Search <i class="fa fa-search" aria-hidden="true"></i></button>
+                        <button type="reset" class="btn btn-info">Reset</button>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="categoryId">Policy Type</label>
+                        <select name="CategoryId" class="form-control">
+                            <option value="">--Select--</option>
+                            @foreach (var i in ViewBag.categories)
+                            {
+                                <option value="@i.CategoryId">@i.CategoryName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="CountryId">Country</label>
+                        <select name="countryId" id="CountryId" class="form-control">
+                            <option value="">--Select--</option>
+                            @foreach (var i in ViewBag.country)
+                            {
+                                <option value="@i.CountryId">@i.CountryName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="EntityId">Applicable For</label>
+                        <select name="entityId" id="EntityId" class="form-control">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="searchTerm">Document Title</label>
+                        <input name="searchTerm" id="searchTerm" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="tag">Tags</label>
+                        <input name="tag" id="tag" placeholder="Enter tags using , separated" class="form-control" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Area Chart -->
+    <div class="col-xl-9 col-lg-8">
+        <div class="card shadow mb-4">
+            <!-- Card Header - Dropdown -->
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">Search result</h6>
+            </div>
+            <!-- Card Body -->
+            <div class="card-body table-responsive">
+                @if (Model.uploads.Count == 0)
+                {
+                    <p>No data found!</p>
+                }
+
+                @if (Model.uploads.Count > 0)
+                {
+                    <table class="table table-bordered">
+                        <thead style="background-color:#3c8dbc;color:white;">
+                            <tr>
+                                <th>Document Title</th>
+                                <th>Effective From</th>
+                                <th>Effective Till</th>
+                                <th>Applicable For</th>
+                                @*<th>Approved By</th>*@
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.uploads)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="dropdown-list-image mr-3">
+                                                @switch (item.Extension)
+                                                {
+                                                    case ".docx":
+                                                        <img class="rounded-circle" src="~/UploadedFiles/ICON/ico-doc.png"
+                                                             alt="...">
+                                                        <div class="status-indicator bg-success"></div>
+                                                        break;
+                                                    case ".doc":
+                                                        <img class="rounded-circle" src="~/UploadedFiles/ICON/ico-doc.png"
+                                                             alt="...">
+                                                        <div class="status-indicator bg-success"></div>
+                                                        break;
+                                                    case ".xls":
+                                                        <img class="rounded-circle" src="~/UploadedFiles/ICON/ico-xls.png"
+                                                             alt="...">
+                                                        <div class="status-indicator bg-success"></div>
+                                                        break;
+                                                    case ".xlsx":
+                                                        <img class="rounded-circle" src="~/UploadedFiles/ICON/ico-xls.png"
+                                                             alt="...">
+                                                        <div class="status-indicator bg-success"></div>
+                                                        break;
+                                                    case ".pdf":
+                                                        <img class="rounded-circle" src="~/UploadedFiles/ICON/ico-pdf.png"
+                                                             alt="...">
+                                                        <div class="status-indicator bg-success"></div>
+                                                        break;
+                                                    case ".PDF":
+                                                        <img class="rounded-circle" src="~/UploadedFiles/ICON/ico-pdf.png"
+                                                             alt="...">
+                                                        <div class="status-indicator bg-success"></div>
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
+                                            </div>
+                                            <div class="font-weight-bold">
+                                                <div>
+                                                    @item.ResourceName ,@item.Version
+                                                </div>
+                                                <div class="small text-gray-500">@item.CategoryName , @item.Tags</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if (item.EffectiveFrom.HasValue == true)
+                                        {
+                                            <p>@item.EffectiveFrom.Value.ToString("dd-MMM-yyyy")</p>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.EffectiveTo.HasValue == true)
+                                        {
+                                            <p>@item.EffectiveTo.Value.ToString("dd-MMM-yyyy")</p>
+                                        }
+                                    </td>
+                                    <td>
+                                        @item.EntityName
+                                    </td>
+                                    @*<td>
+                                            @if (@item.ApprovedByDesgination != null)
+                                            {
+                                                <p>@item.ApprovedByDesgination , @item.ApprovedByName</p>
+                                            }
+                                        </td>*@
+                                    <td>
+                                        @*<a data-toggle="modal" onclick="setDocumentId(@item.UploadId)" href="#" data-target="#exampleModal">
+                                                <i class="fa fa-download" aria-hidden="true" title="Download"></i>
+                                            </a>*@
+                                        <a href="@Url.Action("DownloadAsync", "Home",new { id=item.UploadId})">
+                                            <i class="fa fa-download" aria-hidden="true" title="Download"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#CountryId").change(function () {
+            $("#EntityId").empty();
+            $("#ProgramId").empty();
+            $("#ProjectId").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetEntityByCountry")',
+                dataType: 'json',
+                data: { countryId: $("#CountryId").val() },
+                success: function (datas) {
+                    $.each(datas, function (i, item) {
+                        $("#EntityId").append('<option value="' + item.Value + '">' + item.Text + '</option>');
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed to retrieve states.' + ex);
+                }
+            });
+            return false;
+        })
+    });
+
+        $(document).ready(function () {
+            $("#EntityId").change(function () {
+            $("#ProgramId").empty();
+            $("#ProjectId").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetProgramByEntity")',
+                dataType: 'json',
+                data: { entityId: $("#EntityId").val() },
+                success: function (datas) {
+                    $.each(datas, function (i, item) {
+                        $("#ProgramId").append('<option value="' + item.Value + '">' + item.Text + '</option>');
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed to retrieve states.' + ex);
+                }
+            });
+            return false;
+        })
+        });
+
+
+            $(document).ready(function () {
+                $("#ProgramId").change(function () {
+                $("#ProjectId").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetProjectByProgram")',
+                dataType: 'json',
+                data: { programId: $("#ProgramId").val() },
+                success: function (datas) {
+                    $.each(datas, function (i, item) {
+                        $("#ProjectId").append('<option value="' + item.Value + '">' + item.Text + '</option>');
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed to retrieve states.' + ex);
+                }
+            });
+            return false;
+        })
+    });
+
+
+    function GetEmployeeByPinDOB() {
+        var pin = $("#pin").val();
+        var dob = $("#date").val();
+        if (pin == null || pin == "" || typeof pin == "undefined") {
+            alert("Please enter pin!");
+            return false;
+        }
+        if (dob == null || dob == "" || typeof dob == "undefined") {
+            alert("Please enter Date of birth!");
+            return false;
+        }
+        $.ajax({
+            type: 'POST',
+            url: "../Home/GetEmployeeByPinDOB",
+            dataType: 'json',
+            data: { pin: pin, dob: dob },
+            success: function (data) {
+                $("#error_message").hide();
+                $("#success_message").hide();
+                if (data === false) {
+                    $("#error_message").show();
+                }
+                else {
+                    window.location.href = "../Home/DownloadAsync?id=" + $("#hiddenDocumentId").val();
+                    $("#success_message").show();
+                }
+            },
+            error: function (ex) {
+                alert('Failed to retrieve states.' + ex);
+            }
+        });
+    }
+    function setDocumentId(id) {
+        $("#hiddenDocumentId").val(id);
+    }
+</script>
+

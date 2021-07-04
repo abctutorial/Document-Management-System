@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+	<connectionStrings xdt:Transform="InsertIfMissing">
+		<clear xdt:Transform="InsertIfMissing" />
+		<add
+		  name="Databasic.Example.MySql"
+		  connectionString="server=localhost;port=3306;uid=USER_NAME;pwd=PASSWORD;database=DATABASE;"
+		  providerName="MySql.Data.MySqlClient"
+		  xdt:Transform="InsertIfMissing"
+		  xdt:Locator="Match(name)" />
+	</connectionStrings>
+</configuration>

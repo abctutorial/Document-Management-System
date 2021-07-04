@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+	<connectionStrings xdt:Transform="InsertIfMissing">
+		<clear xdt:Transform="InsertIfMissing" />
+		<add
+		  name="Databasic.Example.PqSql"
+		  connectionString="Server=localhost;Port=5432;Database=DATABASE;User Id=USER_NAME;Password=PASSWORD;"
+		  providerName="Npgsql"
+		  xdt:Transform="InsertIfMissing"
+		  xdt:Locator="Match(name)" />
+	</connectionStrings>
+</configuration>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+	<connectionStrings xdt:Transform="InsertIfMissing">
+		<clear xdt:Transform="InsertIfMissing" />
+		<add
+		  name="Databasic.Example.Oracle"
+		  connectionString="Data Source=localhost/orcl;User Id=USER_NAME;Password=PASSWORD;Integrated Security=yes"
+		  providerName="Oracle.DataAccess.Client"
+		  xdt:Transform="InsertIfMissing"
+		  xdt:Locator="Match(name)" />
+	</connectionStrings>
+</configuration>

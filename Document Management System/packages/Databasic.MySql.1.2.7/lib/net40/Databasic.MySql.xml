@@ -1,0 +1,62 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Databasic.MySql
+</name>
+</assembly>
+<members>
+<member name="T:Databasic.MySql.My.Resources.Resources">
+<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+<member name="P:Databasic.MySql.My.Resources.Resources.ResourceManager">
+<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member>
+<member name="P:Databasic.MySql.My.Resources.Resources.Culture">
+<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member>
+<member name="P:Databasic.MySql.Statement.Command">
+ <summary>
+ Currently prepared and executed MySQL/MariaDB command.
+ </summary>
+</member>
+<member name="P:Databasic.MySql.Statement.Reader">
+ <summary>
+ Currently executed MySQL/MariaDB data reader from MySQL/MariaDB command.
+ </summary>
+</member>
+<member name="M:Databasic.MySql.Statement.#ctor(System.String,MySql.Data.MySqlClient.MySqlConnection)">
+ <summary>
+ Empty SQL statement constructor.
+ </summary>
+ <param name="sql">SQL statement code.</param>
+ <param name="connection">Connection instance.</param>
+</member>
+<member name="M:Databasic.MySql.Statement.#ctor(System.String,MySql.Data.MySqlClient.MySqlTransaction)">
+ <summary>
+ Empty SQL statement constructor.
+ </summary>
+ <param name="sql">SQL statement code.</param>
+ <param name="transaction">SQL transaction instance with connection instance inside.</param>
+</member>
+<member name="M:Databasic.MySql.Statement.addParamsWithValue(System.Object)">
+ <summary>
+ Set up all sql params into internal Command instance.
+ </summary>
+ <param name="sqlParams">Anonymous object with named keys as MySQL/MariaDB statement params without any '@' chars in object keys.</param>
+</member>
+<member name="M:Databasic.MySql.Statement.addParamsWithValue(System.Collections.Generic.Dictionary{System.String,System.Object})">
+ <summary>
+ Set up all sql params into internal Command instance.
+ </summary>
+ <param name="sqlParams">Dictionary with named keys as MySQL/MariaDB statement params without any '@' chars in dictionary keys.</param>
+</member>
+</members>
+</doc>

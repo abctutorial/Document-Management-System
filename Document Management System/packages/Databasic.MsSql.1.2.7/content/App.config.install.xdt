@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<configuration xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+	<connectionStrings xdt:Transform="InsertIfMissing">
+		<clear xdt:Transform="InsertIfMissing" />
+		<add
+		  name="Databasic.Example.MsSql"
+		  connectionString="Data Source=.\SQLEXPRESS;Initial Catalog=DATABASE;User ID=USER_NAME;Password=PASSWORD;Persist Security Info=True;"
+		  providerName="System.Data.SqlClient"
+		  xdt:Transform="InsertIfMissing"
+		  xdt:Locator="Match(name)" />
+	</connectionStrings>
+</configuration>
